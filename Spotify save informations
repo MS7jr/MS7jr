@@ -1,0 +1,16 @@
+import spotipy
+from spotipy.oauth2 import SpotifyOAuth
+
+sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id="Your_Client_ID",
+                                               client_secret="Your_Client_Secret",
+                                               redirect_uri="Your_Redirect_URI",
+                                               scope="user-library-read"))
+
+try:
+    results = sp.current_user_saved_tracks()
+    tracks_info = [(idx + 1, track['name'], track['artists'][0]['name']) for idx, item in enumerate(results['items']) for track in [item['track']]]
+    for idx, name, artist in tracks_info:
+        print(f"{idx}: {name} by {artist}")
+
+except spotipy.SpotifyException as e:
+    print(f"Error: {e}")
